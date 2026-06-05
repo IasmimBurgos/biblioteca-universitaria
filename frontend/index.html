@@ -1,413 +1,881 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca Universitária</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-        :root { --primary: #2c3e50; --secondary: #3498db; --accent: #e74c3c; --bg: #f4f7f6; }
-        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: var(--bg); margin: 0; padding: 20px; color: #333; }
-        
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --bg: #f4f7f6;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
         /* Layout */
-        .container { max-width: 1200px; margin: 0 auto; }
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
         /* Toolbar (Search & Buttons) */
-        .toolbar { display: flex; gap: 15px; background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); align-items: center; flex-wrap: wrap; }
-        .search-box { flex: 1; position: relative; }
-        .search-box input { width: 100%; padding: 10px 10px 10px 40px; border: 1px solid #ddd; border-radius: 5px; }
-        .search-box i { position: absolute; left: 10px; top: 10px; color: #999; }
-        
-        button { cursor: pointer; padding: 10px 20px; border: none; border-radius: 5px; font-weight: 600; transition: 0.2s; display: flex; align-items: center; gap: 5px; }
-        .btn-primary { background: var(--secondary); color: white; }
-        .btn-accent { background: var(--accent); color: white; }
-        .btn-outline { background: transparent; border: 1px solid #ddd; color: #555; }
-        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        .toolbar {
+            display: flex;
+            gap: 15px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 10px 10px 40px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            color: #999;
+        }
+
+        button {
+            cursor: pointer;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #ddd;
+            color: #555;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
 
         /* Table Styles */
-        .table-container { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 15px rgba(0,0,0,0.05); margin-top: 20px; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
-        th { background: #f8f9fa; color: #666; font-weight: 600; }
-        tbody tr { cursor: pointer; transition: background 0.2s; }
-        tbody tr:hover { background: #f1faff; }
-        
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #f8f9fa;
+            color: #666;
+            font-weight: 600;
+        }
+
+        tbody tr {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        tbody tr:hover {
+            background: #f1faff;
+        }
+
         /* Detail View (Hidden by default) */
-        #detailView { display: none; background: white; padding: 30px; border-radius: 10px; margin-top: 20px; }
-        .detail-header { display: flex; gap: 30px; }
-        .detail-img { width: 300px; height: 450px; object-fit: cover; border-radius: 10px; background: #ddd; }
-        .detail-info h2 { color: var(--primary); margin-top: 0; }
-        .tag { background: #e1ecf4; color: #39739d; padding: 5px 10px; border-radius: 15px; font-size: 0.85rem; margin-right: 5px; display: inline-block; margin-top: 5px;}
+        #detailView {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .detail-header {
+            display: flex;
+            gap: 30px;
+        }
+
+        .detail-img {
+            width: 300px;
+            height: 450px;
+            object-fit: cover;
+            border-radius: 10px;
+            background: #ddd;
+        }
+
+        .detail-info h2 {
+            color: var(--primary);
+            margin-top: 0;
+        }
+
+        .tag {
+            background: #e1ecf4;
+            color: #39739d;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            margin-right: 5px;
+            display: inline-block;
+            margin-top: 5px;
+        }
 
         /* Modal Styles */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
-        .modal { background: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; position: relative; }
-        .close-modal { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 1.5rem; }
-        
-        /* Form Styles inside Modal */
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
-        .form-control { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
-        
-        /* Checkbox Grid */
-        .genre-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 5px; }
-        .checkbox-label { display: flex; align-items: center; gap: 5px; font-weight: normal; font-size: 0.9rem; cursor: pointer; }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
 
-        .hidden { display: none !important; }
+        .modal {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        /* Form Styles inside Modal */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* Checkbox Grid */
+        .genre-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: normal;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            background: #e9ecef;
+            color: #333;
+        }
+
+        .tab-btn.active {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
 
         .status {
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: bold;
-}
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
 
-.disponivel {
-    background: #d4edda;
-    color: #155724;
-}
+        .disponivel {
+            background: #d4edda;
+            color: #155724;
+        }
 
-.alugado {
-    background: #f8d7da;
-    color: #721c24;
-}
+        .alugado {
+            background: #f8d7da;
+            color: #721c24;
+        }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <header>
-        <h1>📚 Biblioteca Central</h1>
-    </header>
+    <div class="container">
+        <header>
+            <h1>📚 Biblioteca Central</h1>
+        </header>
 
-    <div id="homeView">
-        <div class="toolbar">
-            <div class="search-box">
-                <i class="material-icons">search</i>
-                <input type="text" id="searchInput" placeholder="Pesquisar por título ou autor..." onkeyup="filterBooks()">
-            </div>
-            <select id="sortSelect" class="form-control" style="width: auto;" onchange="sortBooks()">
-                <option value="titulo">Ordenar por Título</option>
-                <option value="autor">Ordenar por Autor</option>
-                <option value="estoque">Ordenar por Estoque</option>
-            </select>
-            <button class="btn-primary" onclick="openModal('bookModal')">
-                <i class="material-icons">add</i> Cadastrar Livro
-            </button>
-            <button class="btn-accent" onclick="openModal('pedidoModal')">
-                <i class="material-icons">shopping_cart</i> Novo Pedido
-            </button>
-        </div>
+        <div id="homeView">
 
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Título</th>
-                        <th>Autor</th>
-                        <th>Gênero</th>
-                        <th>Estoque</th>
-                        <th>Publicação</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="bookTableBody">
-                    </tbody>
-            </table>
-        </div>
-    </div>
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('acervoTab')">
+                    📖 Acervo
+                </button>
 
-    <div id="detailView">
-        <button class="btn-outline" onclick="showHome()" style="margin-bottom: 20px;">
-            <i class="material-icons">arrow_back</i> Voltar
-        </button>
-        <div class="detail-header">
-            <img id="detImg" src="" class="detail-img" alt="Capa">
-            <div class="detail-info">
-                <h2 id="detTitle">Título do Livro</h2>
-                <p><strong>Autor:</strong> <span id="detAuthor">Nome do Autor</span></p>
-                <p><strong>Páginas:</strong> <span id="detPages">000</span></p>
-                <p><strong>Publicado em:</strong> <span id="detDate">00/00/0000</span></p>
-                <p><strong>Estoque:</strong> <span id="detStock">0</span> unidades</p>
-                <div id="detGenres" style="margin: 15px 0;"></div>
-                <p style="line-height: 1.6; color: #555;" id="detDesc">Descrição...</p>
-            </div>
-        </div>
-    </div>
-</div>
+                <button class="tab-btn" onclick="switchTab('emprestadosTab')">
+                    ⏳ Emprestados
+                </button>
 
-<div id="bookModal" class="modal-overlay">
-    <div class="modal">
-        <span class="close-modal" onclick="closeModal('bookModal')">&times;</span>
-        <h2>Novo Livro</h2>
-        <form id="bookForm">
-            <div class="form-group">
-                <label>Título</label>
-                <input type="text" name="titulo" class="form-control" required>
+                <button class="tab-btn" onclick="switchTab('historicoTab')">
+                    📜 Histórico
+                </button>
             </div>
-            <div class="form-group">
-                <label>Autor (Nome)</label>
-                <input type="text" name="autor_nome" list="authorsList" class="form-control" placeholder="Digite para buscar ou criar..." required autocomplete="off">
-                <datalist id="authorsList"></datalist>
-            </div>
-            <div class="form-group">
-                <label>Gêneros</label>
-                <div class="genre-grid" id="genreOptions">
+
+            <div id="acervoTab" class="tab-content active">
+
+                <div class="toolbar">
+                    <div class="search-box">
+                        <i class="material-icons">search</i>
+                        <input type="text" id="searchInput" placeholder="Pesquisar por título ou autor..."
+                            onkeyup="filterBooks()">
                     </div>
-            </div>
-            <div style="display: flex; gap: 15px;">
-                <div class="form-group" style="flex:1">
-                    <label>Estoque</label>
-                    <input type="number" name="estoque" class="form-control" required>
+                    <select id="sortSelect" class="form-control" style="width: auto;" onchange="sortBooks()">
+                        <option value="titulo">Ordenar por Título</option>
+                        <option value="autor">Ordenar por Autor</option>
+                        <option value="estoque">Ordenar por Estoque</option>
+                    </select>
+                    <button class="btn-primary" onclick="openModal('bookModal')">
+                        <i class="material-icons">add</i> Cadastrar Livro
+                    </button>
+
+                    <button class="btn-accent" onclick="deleteSelectedBooks()">
+                        <i class="material-icons">delete</i> Excluir Livro
+                    </button>
+
+                    <button class="btn-primary" onclick="openModal('emprestimoModal')">
+                        <i class="material-icons">assignment</i> Registrar Empréstimo
+                    </button>
                 </div>
-                <div class="form-group" style="flex:1">
-                    <label>Páginas</label>
-                    <input type="number" name="paginas" class="form-control" required>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAll" onchange="toggleAll(this)"></th>
+                                <th>Título</th>
+                                <th>Autor</th>
+                                <th>Gênero</th>
+                                <th>Disponíveis</th>
+                                <th>Publicação</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookTableBody">
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="form-group">
-                <label>Data Publicação</label>
-                <input type="date" name="data_publicacao" class="form-control" required>
+
+            <div id="emprestadosTab" class="tab-content">
+                <h2>Livros Emprestados</h2>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Aluno</th>
+                                <th>CPF</th>
+                                <th>Livro</th>
+                                <th>Data do Empréstimo</th>
+                                <th>Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="emprestadosTableBody">
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="form-group">
-                <label>Capa do Livro (Imagem)</label>
-                <input type="file" name="capa_do_livro" class="form-control" accept=".jpg,.jpeg,.png">
+
+            <div id="historicoTab" class="tab-content">
+                <h2>Histórico de Empréstimos</h2>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Aluno</th>
+                                <th>CPF</th>
+                                <th>Livro</th>
+                                <th>Data do Empréstimo</th>
+                                <th>Data da Devolução</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historicoTableBody">
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="form-group">
-                <label>Descrição</label>
-                <textarea name="descricao" class="form-control" rows="3"></textarea>
+
+        </div>
+
+        <div id="detailView">
+            <button class="btn-outline" onclick="showHome()" style="margin-bottom: 20px;">
+                <i class="material-icons">arrow_back</i> Voltar
+            </button>
+            <div class="detail-header">
+                <img id="detImg" src="" class="detail-img" alt="Capa">
+                <div class="detail-info">
+                    <h2 id="detTitle">Título do Livro</h2>
+                    <p><strong>Autor:</strong> <span id="detAuthor">Nome do Autor</span></p>
+                    <p><strong>Páginas:</strong> <span id="detPages">000</span></p>
+                    <p><strong>Publicado em:</strong> <span id="detDate">00/00/0000</span></p>
+                    <p><strong>Estoque:</strong> <span id="detStock">0</span> unidades</p>
+                    <div id="detGenres" style="margin: 15px 0;"></div>
+                    <p style="line-height: 1.6; color: #555;" id="detDesc">Descrição...</p>
+                </div>
             </div>
-            <button type="submit" class="btn-primary" style="width: 100%">Salvar Livro</button>
-        </form>
+        </div>
     </div>
-</div>
 
-<div id="pedidoModal" class="modal-overlay">
-    <div class="modal">
-        <span class="close-modal" onclick="closeModal('pedidoModal')">&times;</span>
-        <h2>Registrar Pedido</h2>
-        <form id="pedidoForm">
-            <div class="form-group">
-                <label>Selecione o Livro</label>
-                <select id="pedidoLivroSelect" class="form-control" required></select>
-            </div>
-            <div class="form-group">
-                <label>País de Origem</label>
-                <input type="text" id="pedidoPais" class="form-control" placeholder="Ex: Brasil" required>
-            </div>
-            <div class="form-group">
-                <label>Quantidade</label>
-                <input type="number" id="pedidoQtd" class="form-control" min="1" value="1" required>
-            </div>
-            <button type="submit" class="btn-accent" style="width: 100%">Confirmar Pedido</button>
-        </form>
+    <div id="bookModal" class="modal-overlay">
+        <div class="modal">
+            <span class="close-modal" onclick="closeModal('bookModal')">&times;</span>
+            <h2>Novo Livro</h2>
+            <form id="bookForm">
+                <div class="form-group">
+                    <label>Título</label>
+                    <input type="text" name="titulo" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Autor (Nome)</label>
+                    <input type="text" name="autor_nome" list="authorsList" class="form-control"
+                        placeholder="Digite para buscar ou criar..." required autocomplete="off">
+                    <datalist id="authorsList"></datalist>
+                </div>
+                <div class="form-group">
+                    <label>Gêneros</label>
+                    <div class="genre-grid" id="genreOptions">
+                    </div>
+                </div>
+                <div style="display: flex; gap: 15px;">
+                    <div class="form-group" style="flex:1">
+                        <label>Estoque</label>
+                        <input type="number" name="estoque" class="form-control" required>
+                    </div>
+                    <div class="form-group" style="flex:1">
+                        <label>Páginas</label>
+                        <input type="number" name="paginas" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Data Publicação</label>
+                    <input type="date" name="data_publicacao" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Capa do Livro (Imagem)</label>
+                    <input type="file" name="capa_do_livro" class="form-control" accept=".jpg,.jpeg,.png">
+                </div>
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <textarea name="descricao" class="form-control" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%">Salvar Livro</button>
+            </form>
+        </div>
     </div>
-</div>
 
-<script>
-    const API_BASE = 'http://127.0.0.1:8000/api/';
-    let booksData = []; // Cache local para filtro/ordenação
+    <div id="emprestimoModal" class="modal-overlay">
+        <div class="modal">
+            <span class="close-modal" onclick="closeModal('emprestimoModal')">&times;</span>
 
-    // --- CONFIGURAÇÃO INICIAL ---
-    const genres = ["Ficção", "Romance", "Terror", "Técnico", "Biografia", "Fantasia", "História", "Sci-Fi", "Mistério"];
-    
-    function init() {
-        loadBooks();
-        loadAuthors();
-        renderGenreCheckboxes();
-    }
+            <h2>Registrar Empréstimo</h2>
 
-    // --- GERAÇÃO DE UI ---
-    function renderGenreCheckboxes() {
-        const container = document.getElementById('genreOptions');
-        container.innerHTML = genres.map(g => `
+            <form id="emprestimoForm">
+                <div class="form-group">
+                    <label>Livro</label>
+                    <select name="livro" id="emprestimoLivroSelect" class="form-control" required></select>
+                </div>
+
+                <div class="form-group">
+                    <label>CPF do Aluno</label>
+                    <input type="text" name="aluno_cpf" class="form-control" placeholder="000.000.000-00">
+                </div>
+
+                <p style="text-align:center; color:#777; margin: 8px 0;">ou</p>
+
+                <div class="form-group">
+                    <label>Nome do Aluno</label>
+                    <input type="text" name="aluno_nome" class="form-control" placeholder="Nome completo do aluno">
+                </div>
+
+                <button type="submit" class="btn-primary" style="width: 100%">
+                    Confirmar Empréstimo
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://127.0.0.1:8000/api/';
+        let booksData = []; // Cache local para filtro/ordenação
+
+        // --- CONFIGURAÇÃO INICIAL ---
+        const genres = ["Ficção", "Romance", "Terror", "Técnico", "Biografia", "Fantasia", "História", "Sci-Fi", "Mistério"];
+
+        function init() {
+            loadBooks();
+            loadAuthors();
+            loadEmprestimos();
+            renderGenreCheckboxes();
+        }
+
+        // --- GERAÇÃO DE UI ---
+        function renderGenreCheckboxes() {
+            const container = document.getElementById('genreOptions');
+            container.innerHTML = genres.map(g => `
             <label class="checkbox-label">
                 <input type="checkbox" value="${g}" name="generos"> ${g}
             </label>
         `).join('');
-    }
+        }
 
-    // --- LÓGICA DE DADOS (CRUD) ---
-    
-    // 1. Buscar Livros
-    async function loadBooks() {
-        try {
-            const res = await fetch(API_BASE + 'livros/');
-            booksData = await res.json();
-            renderTable(booksData);
-            populateBookSelect(); // Para o modal de pedidos
-        } catch (e) { console.error(e); }
-    }
+        // --- LÓGICA DE DADOS (CRUD) ---
 
-    // 2. Buscar Autores (Para Autocomplete)
-    async function loadAuthors() {
-        try {
-            const res = await fetch(API_BASE + 'autores/');
-            const authors = await res.json();
-            const datalist = document.getElementById('authorsList');
-            datalist.innerHTML = authors.map(a => `<option value="${a.nome}">`).join('');
-        } catch (e) { console.error(e); }
-    }
+        // 1. Buscar Livros
+        async function loadBooks() {
+            try {
+                const res = await fetch(API_BASE + 'livros/');
+                booksData = await res.json();
+                renderTable(booksData);
+                populateBookSelect(); // Para o modal de pedidos
+            } catch (e) { console.error(e); }
+        }
 
-    // 3. Criar Livro
-    document.getElementById('bookForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
+        // 2. Buscar Autores (Para Autocomplete)
+        async function loadAuthors() {
+            try {
+                const res = await fetch(API_BASE + 'autores/');
+                const authors = await res.json();
+                const datalist = document.getElementById('authorsList');
+                datalist.innerHTML = authors.map(a => `<option value="${a.nome}">`).join('');
+            } catch (e) { console.error(e); }
+        }
 
-    // 1. pegar gêneros corretamente
-    const selectedGenres = Array.from(
-        document.querySelectorAll('input[name="generos"]:checked')
-    ).map(cb => cb.value);
+        // 3. Criar Livro
+        document.getElementById('bookForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-    // 2. montar FormData
-    const formData = new FormData(e.target);
+            // 1. pegar gêneros corretamente
+            const selectedGenres = Array.from(
+                document.querySelectorAll('input[name="generos"]:checked')
+            ).map(cb => cb.value);
 
-    formData.set('genero', selectedGenres.join(','));
+            // 2. montar FormData
+            const formData = new FormData(e.target);
 
-    try {
-        const res = await fetch(API_BASE + 'livros/', {
-            method: 'POST',
-            body: formData
+            formData.set('genero', selectedGenres.join(','));
+
+            try {
+                const res = await fetch(API_BASE + 'livros/', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    alert('Livro cadastrado!');
+                    closeModal('bookModal');
+                    e.target.reset();
+                    loadBooks();
+                    loadAuthors();
+                } else {
+                    console.log(data);
+                    alert('Erro: ' + JSON.stringify(data));
+                }
+
+            } catch (error) {
+                console.log(error);
+                alert('Erro de conexão');
+            }
         });
 
-        const data = await res.json();
+        // Registrar Empréstimo
+        document.getElementById('emprestimoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+
+            const data = {
+                livro: formData.get('livro'),
+                aluno_cpf: formData.get('aluno_cpf').trim(),
+                aluno_nome: formData.get('aluno_nome').trim()
+            };
+
+            if (!data.aluno_cpf && !data.aluno_nome) {
+                alert('Informe o CPF ou o nome do aluno.');
+                return;
+            }
+
+            try {
+                const res = await fetch(API_BASE + 'emprestimos/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await res.json();
+
+                if (res.ok) {
+                    alert('Empréstimo realizado com sucesso!');
+                    closeModal('emprestimoModal');
+                    e.target.reset();
+                    loadBooks();
+                    loadEmprestimos();
+                } else {
+                    alert(JSON.stringify(result));
+                }
+
+            } catch (error) {
+                console.error(error);
+                alert('Erro ao registrar empréstimo');
+            }
+        });
+
+        // --- INTERAÇÃO DA UI ---
+
+        function renderTable(data) {
+            const tbody = document.getElementById('bookTableBody');
+            tbody.innerHTML = '';
+
+            data.forEach(book => {
+                const tr = document.createElement('tr');
+
+                tr.innerHTML = `
+            <td>
+                <input type="checkbox" class="book-checkbox" value="${book.id}" onclick="event.stopPropagation()">
+            </td>
+            <td onclick='showDetail(${JSON.stringify(book)})' style="font-weight:bold">${book.titulo}</td>
+            <td onclick='showDetail(${JSON.stringify(book)})'>${book.nome_autor || 'Desconhecido'}</td>
+            <td onclick='showDetail(${JSON.stringify(book)})'>${book.genero || ''}</td>
+            <td onclick='showDetail(${JSON.stringify(book)})'>${book.estoque > 0 ? book.estoque + ' disponíveis' : 'Esgotado'}</td>
+            <td onclick='showDetail(${JSON.stringify(book)})'>${book.data_publicacao || ''}</td>
+            <td onclick='showDetail(${JSON.stringify(book)})'>
+                <span class="${book.status === 'Disponível' ? 'disponivel' : 'alugado'}">
+                    ${book.status}
+                </span>
+            </td>
+        `;
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        function showDetail(book) {
+            document.getElementById('homeView').classList.add('hidden');
+            document.getElementById('detailView').style.display = 'block';
+
+            document.getElementById('detTitle').textContent = book.titulo || '';
+            document.getElementById('detAuthor').textContent = book.nome_autor || 'Desconhecido';
+            document.getElementById('detPages').textContent = book.paginas || 0;
+            document.getElementById('detDate').textContent = book.data_publicacao || '';
+            document.getElementById('detStock').textContent = book.estoque || 0;
+            document.getElementById('detDesc').textContent = book.descricao || '';
+
+            const img = document.getElementById('detImg');
+            img.src = book.capa_do_livro
+                ? book.capa_do_livro
+                : 'https://via.placeholder.com/300x450?text=Sem+Capa';
+
+            const genresDiv = document.getElementById('detGenres');
+            genresDiv.innerHTML = (book.genero || '')
+                .split(',')
+                .filter(Boolean)
+                .map(g => `<span class="tag">${g}</span>`)
+                .join('');
+        }
+
+        function showHome() {
+            document.getElementById('detailView').style.display = 'none';
+            document.getElementById('homeView').classList.remove('hidden');
+        }
+
+        function filterBooks() {
+            const term = document.getElementById('searchInput').value.toLowerCase();
+
+            const filtered = booksData.filter(b =>
+                (b.titulo || '').toLowerCase().includes(term) ||
+                (b.nome_autor || '').toLowerCase().includes(term)
+            );
+
+            renderTable(filtered);
+        }
+
+        function sortBooks() {
+            const criteria = document.getElementById('sortSelect').value;
+
+            const sorted = [...booksData].sort((a, b) => {
+                if (criteria === 'autor') {
+                    return (a.nome_autor || '').localeCompare(b.nome_autor || '');
+                }
+                if (criteria === 'estoque') {
+                    return b.estoque - a.estoque;
+                }
+                return (a.titulo || '').localeCompare(b.titulo || '');
+            });
+
+            renderTable(sorted);
+        }
+        function populateBookSelect() {
+            const select = document.getElementById('emprestimoLivroSelect');
+
+            if (!select) return;
+
+            select.innerHTML = booksData
+                .filter(book => book.estoque > 0)
+                .map(book =>
+                    `<option value="${book.id}">
+                ${book.titulo}
+            </option>`
+                )
+                .join('');
+        }
+
+        function toggleAll(source) {
+            document.querySelectorAll('.book-checkbox').forEach(cb => {
+                cb.checked = source.checked;
+            });
+        }
+
+        async function deleteSelectedBooks() {
+            const selected = document.querySelectorAll('.book-checkbox:checked');
+
+            if (selected.length === 0) {
+                alert('Selecione ao menos um livro.');
+                return;
+            }
+
+            if (!confirm('Deseja excluir os livros selecionados?')) {
+                return;
+            }
+
+            for (const checkbox of selected) {
+                await fetch(API_BASE + 'livros/' + checkbox.value + '/', {
+                    method: 'DELETE'
+                });
+            }
+
+            alert('Livro(s) removido(s) com sucesso!');
+            document.getElementById('selectAll').checked = false;
+            loadBooks();
+        }
+
+        window.openModal = (id) => {
+            document.getElementById(id).style.display = 'flex';
+        };
+
+        window.closeModal = (id) => {
+            document.getElementById(id).style.display = 'none';
+        };
+
+        window.onclick = (e) => {
+            if (e.target.classList.contains('modal-overlay')) {
+                e.target.style.display = 'none';
+            }
+        };
+
+        async function loadEmprestimos() {
+    try {
+        const res = await fetch(API_BASE + 'emprestimos/');
+        const emprestimos = await res.json();
+
+        const emprestadosBody = document.getElementById('emprestadosTableBody');
+        const historicoBody = document.getElementById('historicoTableBody');
+
+        emprestadosBody.innerHTML = '';
+        historicoBody.innerHTML = '';
+
+        emprestimos.forEach(emp => {
+            const aluno = emp.aluno_detalhes || {};
+
+            if (!emp.data_devolucao) {
+                emprestadosBody.innerHTML += `
+                    <tr>
+                        <td>${aluno.nome || ''}</td>
+                        <td>${aluno.cpf || ''}</td>
+                        <td>${emp.livro_titulo || ''}</td>
+                        <td>${new Date(emp.data_emprestimo).toLocaleDateString('pt-BR')}</td>
+                        <td>
+                            <button class="btn-accent" onclick="devolverLivro('${emp.livro}', '${aluno.cpf}')">
+                                Devolver
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            } else {
+                historicoBody.innerHTML += `
+                    <tr>
+                        <td>${aluno.nome || ''}</td>
+                        <td>${aluno.cpf || ''}</td>
+                        <td>${emp.livro_titulo || ''}</td>
+                        <td>${new Date(emp.data_emprestimo).toLocaleDateString('pt-BR')}</td>
+                        <td>${new Date(emp.data_devolucao).toLocaleDateString('pt-BR')}</td>
+                    </tr>
+                `;
+            }
+        });
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function devolverLivro(livroId, cpf) {
+    if (!confirm('Confirmar devolução?')) {
+        return;
+    }
+
+    try {
+        const res = await fetch(API_BASE + 'emprestimos/devolver/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                livro_id: livroId,
+                cpf: cpf
+            })
+        });
+
+        const result = await res.json();
 
         if (res.ok) {
-            alert('Livro cadastrado!');
-            closeModal('bookModal');
-            e.target.reset();
+            alert(result.mensagem);
             loadBooks();
-            loadAuthors();
+            loadEmprestimos();
         } else {
-            console.log(data);
-            alert('Erro: ' + JSON.stringify(data));
+            alert(JSON.stringify(result));
         }
 
     } catch (error) {
-        console.log(error);
-        alert('Erro de conexão');
+        console.error(error);
+        alert('Erro ao devolver livro');
     }
-});
+}
 
-    // 4. Criar Pedido
-    document.getElementById('pedidoForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const data = {
-            livro: document.getElementById('pedidoLivroSelect').value,
-            pais: document.getElementById('pedidoPais').value,
-            quantidade: document.getElementById('pedidoQtd').value
-        };
-
-        try {
-            const res = await fetch(API_BASE + 'pedidos/', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(data)
-            });
-            if(res.ok) { alert('Pedido realizado!'); closeModal('pedidoModal'); }
-        } catch (e) { alert('Erro no pedido'); }
+function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
     });
 
-    // --- INTERAÇÃO DA UI ---
-
-    function renderTable(data) {
-    const tbody = document.getElementById('bookTableBody');
-    tbody.innerHTML = '';
-
-    data.forEach(book => {
-        const tr = document.createElement('tr');
-        tr.onclick = () => showDetail(book);
-
-        tr.innerHTML = `
-            <td style="font-weight:bold">${book.titulo}</td>
-            <td>${book.nome_autor || 'Desconhecido'}</td>
-            <td>${book.genero || ''}</td>
-            <td>${book.estoque > 0 ? book.estoque + ' disponíveis' : 'Esgotado'}</td>
-            <td>${book.data_publicacao || ''}</td>
-            <td>
-    <span class="${book.status === 'Disponível' ? 'disponivel' : 'alugado'}">
-        ${book.status}
-    </span>
-</td>
-        `;
-
-        tbody.appendChild(tr);
-    });
-}
-
-    function showDetail(book) {
-    document.getElementById('homeView').classList.add('hidden');
-    document.getElementById('detailView').style.display = 'block';
-
-    document.getElementById('detTitle').textContent = book.titulo || '';
-    document.getElementById('detAuthor').textContent = book.nome_autor || 'Desconhecido';
-    document.getElementById('detPages').textContent = book.paginas || 0;
-    document.getElementById('detDate').textContent = book.data_publicacao || '';
-    document.getElementById('detStock').textContent = book.estoque || 0;
-    document.getElementById('detDesc').textContent = book.descricao || '';
-
-    const img = document.getElementById('detImg');
-    img.src = book.capa_do_livro
-        ? book.capa_do_livro
-        : 'https://via.placeholder.com/300x450?text=Sem+Capa';
-
-    const genresDiv = document.getElementById('detGenres');
-    genresDiv.innerHTML = (book.genero || '')
-        .split(',')
-        .filter(Boolean)
-        .map(g => `<span class="tag">${g}</span>`)
-        .join('');
-}
-
-    function showHome() {
-        document.getElementById('detailView').style.display = 'none';
-        document.getElementById('homeView').classList.remove('hidden');
-    }
-
-    function filterBooks() {
-    const term = document.getElementById('searchInput').value.toLowerCase();
-
-    const filtered = booksData.filter(b =>
-        (b.titulo || '').toLowerCase().includes(term) ||
-        (b.nome_autor || '').toLowerCase().includes(term)
-    );
-
-    renderTable(filtered);
-}
-
-    function sortBooks() {
-    const criteria = document.getElementById('sortSelect').value;
-
-    const sorted = [...booksData].sort((a, b) => {
-        if (criteria === 'autor') {
-            return (a.nome_autor || '').localeCompare(b.nome_autor || '');
-        }
-        if (criteria === 'estoque') {
-            return b.estoque - a.estoque;
-        }
-        return (a.titulo || '').localeCompare(b.titulo || '');
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
     });
 
-    renderTable(sorted);
+    document.getElementById(tabId).classList.add('active');
+
+    const clickedButton = document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+    clickedButton.classList.add('active');
+
+    if (tabId === 'emprestadosTab' || tabId === 'historicoTab') {
+        loadEmprestimos();
+    }
+
+    if (tabId === 'acervoTab') {
+        loadBooks();
+    }
 }
-    function populateBookSelect() {
-        const select = document.getElementById('pedidoLivroSelect');
-        select.innerHTML = booksData.map(b => `<option value="${b.id}">${b.titulo}</option>`).join('');
-    }
 
-    // Modais
-    window.openModal = (id) => document.getElementById(id).style.display = 'flex';
-    window.closeModal = (id) => document.getElementById(id).style.display = 'none';
-    
-    // Fechar ao clicar fora
-    window.onclick = (e) => {
-        if(e.target.classList.contains('modal-overlay')) e.target.style.display = 'none';
-    }
-
-    // Iniciar
-    init();
-</script>
+        // Iniciar
+        init();
+    </script>
 
 </body>
+
 </html>
