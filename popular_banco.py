@@ -7,7 +7,40 @@ from datetime import date, timedelta
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'biblioteca_config.settings')
 django.setup()
 
-from core.models import Livro, Autor
+from core.models import Livro, Autor, Aluno
+
+CURSOS = [
+    "Análise e Desenvolvimento de Sistemas",
+    "Ciência da Computação",
+    "Engenharia de Software",
+    "Administração",
+    "Direito",
+    "Psicologia",
+    "Design Gráfico",
+    "Enfermagem",
+    "Pedagogia",
+    "Sistemas de Informação"
+]
+
+TURMAS = [
+    "2022.1", "2022.2",
+    "2023.1", "2023.2",
+    "2024.1", "2024.2",
+    "Manhã A", "Noite B"
+]
+
+NOMES = [
+    "Ana", "Bruno", "Carlos", "Daniela", "Eduardo",
+    "Fernanda", "Gabriel", "Helena", "João", "Julia",
+    "Lucas", "Mariana", "Pedro", "Rafaela", "Samuel",
+    "Tatiane", "Vinicius", "Yasmin", "Leticia", "Iasmim"
+]
+
+SOBRENOMES = [
+    "Silva", "Santos", "Oliveira", "Souza", "Rodrigues",
+    "Ferreira", "Alves", "Pereira", "Lima", "Gomes",
+    "Costa", "Ribeiro", "Martins", "Carvalho", "Almeida"
+]
 
 def gerar_data_aleatoria():
     """Gera uma data aleatória nos últimos 20 anos"""
@@ -138,26 +171,43 @@ dados_livros = [
     ("Anne de Green Gables", "L.M. Montgomery", "Romance,Infantil")
 ]
 
+def gerar_cpf():
+    parte1 = random.randint(0, 999)
+    parte2 = random.randint(0, 999)
+    parte3 = random.randint(0, 999)
+    digitos = random.randint(0, 99)
+
+    return f"{parte1:03d}.{parte2:03d}.{parte3:03d}-{digitos:02d}"
+
+
+def gerar_nome_aluno():
+    return f"{random.choice(NOMES)} {random.choice(SOBRENOMES)}"
+
+
+def gerar_data_nascimento():
+    idade = random.randint(18, 30)
+    dias_extra = random.randint(0, 364)
+
+    return date.today() - timedelta(days=(idade * 365 + dias_extra))
+
 def povoar_banco():
     print("Iniciando o povoamento do banco de dados...")
     print(f"Total de livros para inserir: {len(dados_livros)}")
-
-    # Opcional: Limpar banco antes de povoar (cuidado em produção!)
-    # Livro.objects.all().delete()
-    # Autor.objects.all().delete()
 
     contador_livros = 0
     contador_autores = 0
 
     for titulo, nome_autor, genero in dados_livros:
-        # 1. Lógica "Get or Create" para o Autor
-        autor_obj, created = Autor.objects.get_or_create(nome=nome_autor)
+
+        autor_obj, created = Autor.objects.get_or_create(
+            nome=nome_autor
+        )
+
         if created:
             contador_autores += 1
 
-        # 2. Criar o Livro
-        # Verificamos se o livro já existe para não duplicar se rodar o script 2x
         if not Livro.objects.filter(titulo=titulo).exists():
+
             Livro.objects.create(
                 titulo=titulo,
                 autor=autor_obj,
@@ -166,17 +216,50 @@ def povoar_banco():
                 paginas=random.randint(100, 900),
                 data_publicacao=gerar_data_aleatoria(),
                 descricao=f"Uma obra fascinante de {nome_autor} que explora temas de {genero.split(',')[0]}. Leitura indispensável.",
-                capa_do_livro=None # Deixamos null para usar o placeholder do Frontend
+                capa_do_livro=None
             )
+
             contador_livros += 1
             print(f"[+] Livro criado: {titulo}")
+
         else:
             print(f"[!] Livro já existe: {titulo}")
+
+    contador_alunos = 0
+    cpfs_gerados = set()
+
+    print("\nGerando alunos fictícios...")
+
+    while contador_alunos < 100:
+
+        cpf = gerar_cpf()
+
+        if cpf in cpfs_gerados:
+            continue
+
+        cpfs_gerados.add(cpf)
+
+        aluno, criado = Aluno.objects.get_or_create(
+            cpf=cpf,
+            defaults={
+                "nome": gerar_nome_aluno(),
+                "data_nascimento": gerar_data_nascimento(),
+                "curso": random.choice(CURSOS),
+                "turma": random.choice(TURMAS),
+            }
+        )
+
+        if criado:
+            contador_alunos += 1
+            print(f"[+] Aluno criado: {aluno.nome} - {aluno.cpf}")
+
+    print(f"\nTotal de alunos criados: {contador_alunos}")
 
     print("-" * 40)
     print("Povoamento concluído com sucesso!")
     print(f"Novos Autores cadastrados: {contador_autores}")
     print(f"Novos Livros cadastrados: {contador_livros}")
-
+    print(f"Novos Alunos cadastrados: {contador_alunos}")
+    
 if __name__ == '__main__':
     povoar_banco()
