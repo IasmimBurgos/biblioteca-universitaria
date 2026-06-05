@@ -1,6 +1,7 @@
 from django.db import models
 import uuid
 
+
 class Autor(models.Model):
     nome = models.CharField(max_length=255, unique=True)
 
@@ -16,12 +17,9 @@ class Livro(models.Model):
     autor = models.ForeignKey(Autor, related_name='livros', on_delete=models.CASCADE)
     estoque = models.IntegerField()
     descricao = models.TextField()
-
     capa_do_livro = models.ImageField(upload_to='capas/', blank=True, null=True)
-
     data_publicacao = models.DateField()
     paginas = models.IntegerField()
-
     genero = models.CharField(max_length=255)
 
     @property
@@ -34,14 +32,23 @@ class Livro(models.Model):
         return self.titulo
 
 
-class Pedido(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    livro = models.ForeignKey(Livro, on_delete=models.CASCADE)
-    pais = models.CharField(max_length=100)
-    quantidade = models.IntegerField()
-
-    criado_em = models.DateTimeField(auto_now_add=True)
-    atualizado_em = models.DateTimeField(auto_now=True)
+class Aluno(models.Model):
+    cpf = models.CharField(max_length=14, primary_key=True)
+    nome = models.CharField(max_length=255)
+    data_nascimento = models.DateField()
+    curso = models.CharField(max_length=100)
+    turma = models.CharField(max_length=50)
 
     def __str__(self):
-        return f"Pedido {self.id} - {self.livro.titulo}"
+        return f"{self.nome} ({self.cpf})"
+
+
+class Emprestimo(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    livro = models.ForeignKey(Livro, on_delete=models.CASCADE)
+    aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE)
+    data_emprestimo = models.DateTimeField(auto_now_add=True)
+    data_devolucao = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.aluno.nome} pegou {self.livro.titulo}"
